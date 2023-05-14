@@ -1,0 +1,404 @@
+library(shiny)
+library(e1071)
+library(randomForest)
+library(kknn)
+library(caret)
+library(pROC)
+library(gridExtra)
+library(tidyverse)
+library(reshape2)
+library(ggplot2)
+library(kernlab)
+library(BiocManager)
+options(repos = BiocManager::repositories())
+library(tuneR)
+library(GEOquery)
+library(limma)
+library(DT)
+
+load('GSE1563t.RData')
+load('GSE9493t.RData')
+# Define UI for dataset viewer app ----
+ui <- fluidPage(
+  fluidRow(
+    column(1,offset = 0,
+           img(
+             src = "1.jpeg",
+             height =100,
+             width =100
+           )),
+    column(3,offset = 1,
+           selectInput("dataset", h3("Select dataset"), 
+                       choices = list("GSE1563" = 'GSE1563',
+                                      "GSE9493" = 'GSE9493'),
+                       selected ='GSE1563')),
+    column(1,offset = 0,
+           img(
+             src = "2.jpeg",
+             height =100,
+             width =80
+           )),
+    column(5, offset = 1,
+           sliderInput("obs", label = c("Number of predictor variables"),
+                       min = 10, max = 200, value = 50)
+           # sliderInput("slider2", "",
+           #             min = 0, max = 100, value = c(25, 75))
+    ),
+  ),
+  
+  tabsetPanel(
+    tabPanel("Limmer out",
+             titlePanel("Top gen by limmer"),
+             fluidRow(
+               column(
+                 12,offset = 0,
+                 tableOutput("summary")
+               ),
+               column(
+                 6,offset = 1,
+                 plotOutput(outputId = "distPlot")
+               )
+             )
+             
+    ),
+    tabPanel("TOP 10 gen",
+             
+             fluidRow(
+               column(
+                 1,offset = 0,
+                 plotOutput(outputId = "boxplot")
+               ) 
+             )
+    ),
+    tabPanel("ROC",
+             fluidRow(
+               column(
+                 6,offset = 0,
+                 p("ROC curve for the all data"),
+                 plotOutput(outputId = "Plot")
+               ) 
+             )
+    ),
+    tabPanel("Accuracy",  
+             fluidRow(
+               column(
+                 3,offset = 2,
+                 p("CV accuracy rate"),
+                 
+                 plotOutput(outputId = "Plot2")
+               )
+             )
+    ),
+    tabPanel("Analysis of patients",
+             sidebarLayout(
+               # Sidebar panel for inputs ----
+               sidebarPanel(
+                 # Input: Slider for the number of bins ----
+                 sliderInput(inputId = "top1",
+                             label = "IL10RA",
+                             min = 100,
+                             max = 500,
+                             value = 200),
+                 # Input: Slider for the number of bins ----
+                 sliderInput(inputId = "top2",
+                             label ="COL6A3",
+                             min = 200,
+                             max = 600,
+                             value = 300),
+                 # Input: Slider for the number of bins ----
+                 sliderInput(inputId = "top3",
+                             label = "STAT1",
+                             min = 300,
+                             max = 4000,
+                             value = 1500),
+                 # Input: Slider for the number of bins ----
+                 sliderInput(inputId = "top4",
+                             label = "AOAH",
+                             min = 100,
+                             max = 600,
+                             value = 300),
+                 # Input: Slider for the number of bins ----
+                 sliderInput(inputId = "top5",
+                             label = "LAPTM5",
+                             min = 300,
+                             max = 4000,
+                             value = 1200)
+               ),
+               # Main panel for displaying outputs ----
+               mainPanel(
+                 p("Here is the change in the 
+                   probability of the first five 
+                   genes"),
+                 fluidRow(
+                   # column(3,
+                   #        p("gen dat"),
+                   #        tableOutput(outputId = "pat")),
+                   p("The category we predict is"),
+                   column(5,offset = 4,
+                          h4("Predicted class"),
+                          verbatimTextOutput("text")))
+                 
+               )
+             )),
+
+    tabPanel("Analysis of New patients", 
+    titlePanel("loading and Uploading"),
+    
+    # Sidebar layout with input and output definitions ----
+    sidebarLayout(
+      
+      # Sidebar panel for inputs ----
+      sidebarPanel(
+        # Button
+        p("You can download the format gene data template and upload it"),
+        downloadButton("downloadData", "Download"),
+        br(),
+        br(),
+        p("Upload new data"),
+        # Input: Select a file ----
+        fileInput("file1", "New CSV File",
+                  multiple = TRUE,
+                  accept = c("text/csv",
+                             "text/comma-separated-values,text/plain",
+                             ".csv")),
+        selectInput("method", h3("Select method"), 
+                    choices = list("rf" = 'rf',
+                                   "svm" = 'svm',
+                                   "knn" = 'knn',
+                    selected ='rf'))),
+      mainPanel(
+        
+        # Output: Data file ----
+        DTOutput("contents")
+        
+      ))
+    )
+    )
+)
+
+# Define server logic to summarize and view selected dataset ----
+server <- function(input, output) {
+  # Return the requested dataset ----
+  datasetInput <- reactive({
+    switch(input$dataset,
+           "GSE1563" = GSE1563,
+           "GSE9493" = GSE9493)
+  })
+  aa <- reactive({
+    dataset <-datasetInput()
+    # dataset=gen1
+    Outcome1 = dataset[[2]]
+    eMat1 = dataset[[1]]
+    genname=dataset[[3]]
+    design1 = model.matrix( ~ Outcome1)
+    fit1 = lmFit(eMat1, design1)
+    fit1 = eBayes(fit1)
+    a1 = topTable(fit1,genelist =genname, n =nrow(fit1))
+    a1
+  })
+  output$summary <- renderTable({
+    a1=aa()
+    head(a1)
+  })
+  
+  output$distPlot <- renderPlot({
+    a1=aa()
+    p1 = ggplot(a1, aes(x = AveExpr, y = logFC)) +
+      geom_point(aes(colour = -log10(P.Value)), alpha = 1 / 3, size =
+                   1) +
+      scale_colour_gradient(low = "blue", high = "red") +
+      ylab("log2 fold change") + xlab("Average expression")
+    p2 = ggplot(a1, aes(logFC, -log10(P.Value))) +
+      geom_point(aes(colour = -log10(P.Value)), alpha = 1 / 3, size =
+                   1) +
+      scale_colour_gradient(low = "blue", high = "red") +
+      xlab("log2 fold change") + ylab("-log10 p-value")
+    grid.arrange(p1, p2, ncol = 2)
+  }, height = 200, width = 500)
+  
+  output$boxplot <- renderPlot({
+    dataset <- datasetInput()
+    # dataset=gen1
+    Outcome1 = dataset[[2]]
+    eMat1 = dataset[[1]]
+    a1=aa()
+    ind=rownames(a1)[1:10]
+    topdat=eMat1[ind,]
+    rownames(topdat)=a1$ID[1:10]
+    datn=melt(topdat)
+    datnn=cbind(datn,state=rep(Outcome1,each=10))
+    datnn%>% ggplot(aes(y=value,fill=state))+geom_boxplot()+  labs(title="top10",x="Gene", y="level") +
+      scale_x_discrete(labels=a1$ID[1:5])+facet_wrap(~Var1, scales = "free_y",ncol=5)
+  }, height = 300, width = 800) 
+  
+  mod<-reactive({
+    dataset <- datasetInput()
+    a1=aa()
+    Outcome1 = dataset[[2]]
+    eMat1 = dataset[[1]]
+    genname=dataset[[3]]
+    top50=rownames(a1)[1:input$obs]
+    ind1=rownames(eMat1) %in% top50
+    fixdat=eMat1[ind1,] %>% t()
+    colnames(fixdat)=genname[ind1]
+    X1 = as.matrix(fixdat)
+    y1 = Outcome1
+    set.seed(123)
+    train_index <- createDataPartition(Outcome1, p = 0.8, list = FALSE)
+    train_X <- X1[train_index, ]
+    test_X <- X1[-train_index, ]
+    train_y <- y1[train_index]
+    test_y <- y1[-train_index]
+    # set model training mode as 10 folds cross validation
+    ctrl <- trainControl(method = "repeatedcv",
+                         number = 5, repeats = 10,classProbs = T)
+    set.seed(123)
+    rf_model <- train(x=train_X,y=train_y, method = "rf", trControl = ctrl)
+    set.seed(123)
+    svm_model <- train(x=train_X,y=train_y, method = "svmLinear", trControl = ctrl)
+    
+    # Predict with test data (out sample)
+    svm_pred <- predict(svm_model, newdata = test_X, type = "prob")
+    
+    set.seed(123)
+    knn_model <- train(x=train_X,y=train_y, method = "knn", trControl = ctrl)
+    list(rf_model,svm_model,knn_model)
+  })
+  
+  
+  output$Plot <- renderPlot({
+    dataset <- datasetInput()
+    mods<-mod()
+    # dataset=gen1
+    Outcome1 = dataset[[2]]
+    eMat1 = dataset[[1]]
+    design1 = model.matrix( ~ Outcome1)
+    fit1 = lmFit(eMat1, design1)
+    fit1 = eBayes(fit1)
+    ind1 = topTable(fit1, n = input$obs) %>% rownames()
+    ind1 = rownames(eMat1) %in% ind1
+    fixdat1 = eMat1[ind1, ]
+    fixdat1 = t(fixdat1)
+    a1=aa()
+    genname=dataset[[3]]
+    colnames(fixdat1)=genname[ind1]
+    X1 = as.matrix(fixdat1)
+    y1 = Outcome1
+    set.seed(123)
+    rf_pred <- predict(mods[[1]], newdata = X1, type = "prob")
+    rf_roc <- roc(y1, rf_pred[,1])
+    par(mfrow=c(1,3))
+    plot(rf_roc, main = "ROC Curve (Random Forest)", print.auc = TRUE, legacy.axes = TRUE)
+    set.seed(123)
+    # Predict with test data (out sample)
+    svm_pred <- predict(mods[[2]], newdata = X1, type = "prob")
+    
+    # Calculate ROC 
+    svm_roc <- roc(y1, svm_pred[, 1])
+    
+    # Plot ROC 
+    plot(svm_roc, main = "ROC Curve (SVM)", print.auc = TRUE, legacy.axes = TRUE)
+    
+    # Predict with test data (out sample)
+    knn_pred <- predict(mods[[3]], newdata = X1, type = "prob")
+    
+    # Calculate ROC 
+    knn_roc <- roc(y1, knn_pred[,1])
+    
+    # Plot ROC 
+    plot(knn_roc, main = "ROC Curve (KNN)", print.auc = TRUE, legacy.axes = TRUE)
+  }, height = 300, width = 600)
+  
+  
+  output$Plot2 <- renderPlot({
+    mods=mod()
+    svm_model=mods[[1]]
+    rf_model=mods[[2]]
+    knn_model=mods[[3]]
+    result<-data.frame(svm_model=svm_model$results$Accuracy,
+                       rf_model=rf_model$results$Accuracy,
+                       knn_model=knn_model$results$Accuracy)
+    melt(result) %>% 
+      ggplot(aes(y=value,x=variable,fill=variable,group=variable))+geom_boxplot(col=1)+labs(title = 'mean eroo',ylab='erro')+ylim(0.6,1)},
+    height = 400, width = 600)
+  
+  
+  output$pat <- renderTable({
+    dataset <- datasetInput()
+    a1=aa()
+    mods=mod()
+    # dataset=gen1
+    rf_model=mods[[1]]
+    Outcome1 = dataset[[2]]
+    eMat1 = dataset[[1]]
+    top=rownames(a1)[1:5]
+    fixdat=eMat1 %>% t()
+    rownames(fixdat1)=a1$ID[1:input$obs]
+    X1 = as.matrix(fixdat)
+    X11=colMeans(X1)
+    X11=t(as.matrix(X11))
+    sdd=apply(X1, 2,sd)
+    X11[,top[1]]=sdd[top[1]]*(input$top1)
+    X11[,top[2]]=sdd[top[2]]*(input$top2)
+    X11[,top[3]]=sdd[top[3]]*(input$top3)
+    X11[,top[4]]=sdd[top[4]]*(input$top4)
+    X11[,top[5]]=sdd[top[5]]*(input$top5)
+    data.frame(name=a1$ID[1:5],data=X11[,top])
+    })
+  
+  output$text <- renderText({ 
+    dataset <- datasetInput()
+    a1=aa()
+    Outcome1 = dataset[[2]]
+    eMat1 = dataset[[1]]
+    top=rownames(a1)[1:5]
+    ind1=rownames(eMat1) %in% top
+    fixdat=eMat1[ind1,] %>% t()
+    X1 = as.matrix(fixdat)
+    y1 = Outcome1
+    set.seed(123)
+    train_index <- createDataPartition(Outcome1, p = 0.8, list = FALSE)
+    train_X <- X1[train_index, ]
+    test_X <- X1[-train_index, ]
+    train_y <- y1[train_index]
+    test_y <- y1[-train_index]
+    # set model training mode as 10 folds cross validation
+    ctrl <- trainControl(method = "repeatedcv",
+                         number = 3, repeats = 2,classProbs = T)
+    set.seed(123)
+    knn_model <- train(x=train_X,y=train_y, method = "knn", trControl = ctrl)
+    X1 = as.matrix(fixdat)
+    X11=colMeans(X1)
+    X11=t(as.matrix(X11))
+    sdd=apply(X1, 2,sd)
+    X11[,top[1]]=(input$top1)
+    X11[,top[2]]=(input$top2)
+    X11[,top[3]]=(input$top3)
+    X11[,top[4]]=(input$top4)
+    X11[,top[5]]=(input$top5)
+    pred=predict(knn_model,X11)
+    paste0(pred)
+  })
+
+  # Downloadable csv of selected dataset ----
+  output$downloadData <- downloadHandler(
+    filename = function() {
+      paste("mydata",".csv", sep = "")
+    },
+    content = function(file) {
+
+      write.csv(mod()[[1]]$trainingData[1,], file)
+    }
+  )
+  
+  output$contents <- renderDT({
+    mods=mod()
+    req(input$file1)
+    predat <- read_csv(input$file1$datapath)
+    dd=ifelse(input$method=="rf",1,ifelse(input$method=='svm',2,3))
+    tibble(ID=predat[,1],pred=predict(mods[[dd]],predat[,-c(1,(input$obs+2))]))%>% datatable()
+  })
+}
+
+# Create Shiny app ----
+shinyApp(ui = ui, server = server)

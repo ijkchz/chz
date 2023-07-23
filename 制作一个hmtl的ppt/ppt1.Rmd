@@ -1,0 +1,141 @@
+---
+title: "myppt"
+author: "chz"
+date: "`r Sys.Date()`"
+output:
+  slidy_presentation: default
+  ioslides_presentation: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE,message = F,warning = F)
+library(tidyverse)
+library(DT)
+library(plotly)
+library(gganimate)
+```
+
+## R Markdown
+
+1. **加粗**
+2. *斜体*
+3. ~~删除~~
+4. ***斜体加粗的文字***
+
+|姓名|性别|分数|
+|--|:--:|--:|
+|小明|男|100|
+|小红|女|89|
+|小飞|男|88|
+
+## Slide with Bullets
+
+- Bullet 1
+- Bullet 2
+- Bullet 3
+- Bullet 4
+
+## Slide with R Output
+
+```{r cars, echo = TRUE}
+summary(cars)
+```
+
+## 简单图
+
+```{r pressure}
+plot(cars)
+```
+
+## 可查询表格
+```{r table}
+DT::datatable(mtcars)
+```
+
+
+## plot high
+
+```{r,fig.height=3,fig.width=6,cache=TRUE}
+library(patchwork)
+mydat=tibble(a=2000:2019,b=runif(20,1,100),c=sample(c('a','b'),20,replace = T))
+p1<-ggplot(mydat,aes(x=a,y=b,col=c,group=c))+geom_line()+geom_point()
+p2<-ggplot(mydat,aes(x=c,y=b,col=c,group=c))+geom_boxplot()
+pp<-(p1/ plot_spacer())|p2
+ggplotly(p1)
+ggplotly(p2)
+```
+
+## 流程图
+```{r 流程图}
+library(DiagrammeR)
+grViz("
+  digraph {
+# initiate graph
+graph [layout = dot, rankdir = LR, label = '研究路线\n\n',labelloc = t]
+
+# global node settings
+node [shape = rectangle, style = filled, fillcolor = Linen]
+
+    A[label = '数据', shape = folder, fillcolor = Beige]
+    B[label =  '预处理-\n选取，整合变量']
+    C[label =  '欠采样\n 类别不平衡样本']
+    D[label =  '朴素贝叶斯']
+    E[label =  '逻辑回归']
+    F[label =  '神经网络']
+    G[label= 'gbm梯度提升']
+    H[label= 'gbm提升模型\n参数优化']
+    P[label= '1.准确率 \n 2.重要性 \n 3.ROC曲线']
+    MOD[label= '最终模型',fillcolor = Beige]
+
+    
+blank1[label = '', width = 0.01, height = 0.01]   
+# A -> blank1[dir=none];
+# blank1 -> B[minlen=10];
+#   {{ rank = same; blank1 B }}
+# blank1 -> C
+# blank2[label = '', width = 0.01, height = 0.01]   
+# C -> blank2[dir=none];
+# blank2 -> D[minlen=1];
+#   {{ rank = same; blank2 E }}
+# blank2 -> E [minlen=10]
+    A->B
+      {{ rank = same; A B }}
+    B->C
+    C->{D,E,F,G}
+      {D,E,F,G}->P
+    subgraph cluster_modules {
+    label = '模型构建'
+    color = red
+    style = dashed
+    # connect moderator to module 4
+    {D,E,F,G}
+        }
+  P->H
+    subgraph cluster_moderator {
+    label = '模型评估'
+    color = red
+    style = dashed
+    P}
+    H->MOD
+      {{ rank = same;H MOD }}
+  }
+")
+```
+
+## 视频
+<video src="./file/1.mp4" width="600px" height="400px" controls="controls"></video>
+
+## 动态图
+```{r,cache=TRUE,fig.height=3,fig.width=4}
+as.tibble(EuStockMarkets) %>% mutate(year=c(1:1860)) %>% 
+ggplot(aes(x=SMI,y=CAC)) +
+geom_point(size=1,alpha=0.6,col='red') +
+transition_states(year,
+                  transition_length = 2,
+                  state_length = 1)+
+ease_aes('linear')+
+ggtitle('Timepoints is {closest_state} \n VL(M) is ture?')+
+  shadow_mark(size = 0.5, colour = 'lightblue')
+```
+
+

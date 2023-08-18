@@ -2,9 +2,10 @@
 title: "myppt"
 author: "chz"
 date: "`r Sys.Date()`"
-output:
-  slidy_presentation: default
-  ioslides_presentation: default
+output: powerpoint_presentation
+# output:
+#   slidy_presentation: default
+#   ioslides_presentation: default
 ---
 
 ```{r setup, include=FALSE}
@@ -15,7 +16,9 @@ library(plotly)
 library(gganimate)
 ```
 
+
 ## R Markdown
+
 
 1. **加粗**
 2. *斜体*
@@ -41,11 +44,6 @@ library(gganimate)
 summary(cars)
 ```
 
-## 简单图
-
-```{r pressure}
-plot(cars)
-```
 
 ## 可查询表格
 ```{r table}
@@ -54,6 +52,8 @@ DT::datatable(mtcars)
 
 
 ## plot high
+
+### 1
 
 ```{r,fig.height=3,fig.width=6,cache=TRUE}
 library(patchwork)
@@ -64,6 +64,20 @@ pp<-(p1/ plot_spacer())|p2
 ggplotly(p1)
 ggplotly(p2)
 ```
+
+### 2
+```{r,fig.height=3,fig.width=6,cache=TRUE}
+p<-ggplot(mtcars,aes(x=cyl,fill=factor(vs)))+
+  geom_bar()
+  ggplotly(p)
+```
+
+### 3
+```{r 3D}
+plot_ly(mpg, x = ~cty, y = ~hwy, z = ~cyl,size=0.1) %>%
+  add_markers(color = ~cyl)
+```
+
 
 ## 流程图
 ```{r 流程图}
@@ -138,4 +152,9 @@ ggtitle('Timepoints is {closest_state} \n VL(M) is ture?')+
   shadow_mark(size = 0.5, colour = 'lightblue')
 ```
 
+## 地图
 
+```{r out.width='100%', fig.height=6, eval=require('leaflet')}
+library(leaflet)
+leaflet() %>% addTiles() %>% setView(112.99, 28.11, zoom = 10)
+```

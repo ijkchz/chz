@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>我的每日ppt</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="caohuazhang" />
+    <meta name="date" content="2023-08-18" />
+    <script src="ppt2_files/header-attrs/header-attrs.js"></script>
+    <script src="ppt2_files/htmlwidgets/htmlwidgets.js"></script>
+    <script src="ppt2_files/plotly-binding/plotly.js"></script>
+    <script src="ppt2_files/typedarray/typedarray.min.js"></script>
+    <script src="ppt2_files/jquery/jquery-3.6.0.min.js"></script>
+    <link href="ppt2_files/crosstalk/css/crosstalk.min.css" rel="stylesheet" />
+    <script src="ppt2_files/crosstalk/js/crosstalk.min.js"></script>
+    <link href="ppt2_files/plotly-htmlwidgets-css/plotly-htmlwidgets.css" rel="stylesheet" />
+    <script src="ppt2_files/plotly-main/plotly-latest.min.js"></script>
+    <link href="ppt2_files/leaflet/leaflet.css" rel="stylesheet" />
+    <script src="ppt2_files/leaflet/leaflet.js"></script>
+    <link href="ppt2_files/leafletfix/leafletfix.css" rel="stylesheet" />
+    <script src="ppt2_files/proj4/proj4.min.js"></script>
+    <script src="ppt2_files/Proj4Leaflet/proj4leaflet.js"></script>
+    <link href="ppt2_files/rstudio_leaflet/rstudio_leaflet.css" rel="stylesheet" />
+    <script src="ppt2_files/leaflet-binding/leaflet.js"></script>
+    <link href="ppt2_files/datatables-css/datatables-crosstalk.css" rel="stylesheet" />
+    <script src="ppt2_files/datatables-binding/datatables.js"></script>
+    <link href="ppt2_files/dt-core/css/jquery.dataTables.min.css" rel="stylesheet" />
+    <link href="ppt2_files/dt-core/css/jquery.dataTables.extra.css" rel="stylesheet" />
+    <script src="ppt2_files/dt-core/js/jquery.dataTables.min.js"></script>
+    <script src="ppt2_files/viz/viz.js"></script>
+    <link href="ppt2_files/DiagrammeR-styles/styles.css" rel="stylesheet" />
+    <script src="ppt2_files/grViz-binding/grViz.js"></script>
+    <link rel="stylesheet" href="zh-CN.css" type="text/css" />
+    <link rel="stylesheet" href="style.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+.title[
+# 我的每日ppt
+]
+.subtitle[
+## 第一版
+]
+.author[
+### caohuazhang
+]
+.institute[
+### R
+]
+.date[
+### 2023-08-18
+]
+
+---
+
+
+background-image: url(www/bg.jpeg)
+
+
+
+
+# myppt
+
+### &lt;font color=Blue size=50&gt;我是蓝色&lt;/font&gt;
+
+---
+&lt;!-- 按顺序出现 --&gt;
+除非你是六指琴魔，否则我建议安装 [RStudio 编辑器](https://www.rstudio.com/products/rstudio/)，它会让你做幻灯片做得飞起。
+
+- 从菜单 `File -&gt; New File -&gt; R Markdown -&gt; From Template -&gt; Ninja Presentation (Simplified Chinese)` 创建一个新文档；
+
+--
+
+- 点击 `Knit` 按钮编译文档；
+
+--
+
+- 或者点击 [RStudio 插件](https://rstudio.github.io/rstudioaddins/)&lt;sup&gt;*&lt;/sup&gt; “Infinite Moon Reader” 在 RStudio 里实时预览幻灯片（每次你保存文档的时候，它会自动重新编译）；
+
+&lt;!-- 尾注 --&gt;
+.footnote[[*] 如果你看不到模板或者插件，请参见 [#2](https://github.com/yihui/xaringan/issues/2)，你的某些 R 包可能崩坏了，需要重新安装。]
+
+
+---
+
+# R 图形
+
+
+```r
+p&lt;-ggplot(mtcars,aes(x=cyl,fill=factor(vs)))+
+  geom_bar()
+ggplotly(p)
+```
+
+<div class="plotly html-widget html-fill-item-overflow-hidden html-fill-item" id="htmlwidget-921f3019bbae2aa7360d" style="width:504px;height:252px;"></div>
+<script type="application/json" data-for="htmlwidget-921f3019bbae2aa7360d">{"x":{"data":[{"orientation":"v","width":[1.8,1.8,1.8],"base":[10,4,0],"x":[4,6,8],"y":[1,3,14],"text":["count:  1<br />cyl: 4<br />factor(vs): 0","count:  3<br />cyl: 6<br />factor(vs): 0","count: 14<br />cyl: 8<br />factor(vs): 0"],"type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(248,118,109,1)","line":{"width":1.88976377952756,"color":"transparent"}},"name":"0","legendgroup":"0","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"orientation":"v","width":[1.8,1.8],"base":[0,0],"x":[4,6],"y":[10,4],"text":["count: 10<br />cyl: 4<br />factor(vs): 1","count:  4<br />cyl: 6<br />factor(vs): 1"],"type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(0,191,196,1)","line":{"width":1.88976377952756,"color":"transparent"}},"name":"1","legendgroup":"1","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null}],"layout":{"margin":{"t":30.6118721461187,"r":7.30593607305936,"b":44.5662100456621,"l":37.2602739726027},"plot_bgcolor":"rgba(235,235,235,1)","paper_bgcolor":"rgba(255,255,255,1)","font":{"color":"rgba(0,0,0,1)","family":"","size":14.6118721461187},"xaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[2.81,9.19],"tickmode":"array","ticktext":["3","4","5","6","7","8","9"],"tickvals":[3,4,5,6,7,8,9],"categoryorder":"array","categoryarray":["3","4","5","6","7","8","9"],"nticks":null,"ticks":"outside","tickcolor":"rgba(51,51,51,1)","ticklen":3.65296803652968,"tickwidth":0.66417600664176,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.689497716895},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(255,255,255,1)","gridwidth":0.66417600664176,"zeroline":false,"anchor":"y","title":{"text":"cyl","font":{"color":"rgba(0,0,0,1)","family":"","size":14.6118721461187}},"hoverformat":".2f"},"yaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[-0.7,14.7],"tickmode":"array","ticktext":["0","5","10"],"tickvals":[0,5,10],"categoryorder":"array","categoryarray":["0","5","10"],"nticks":null,"ticks":"outside","tickcolor":"rgba(51,51,51,1)","ticklen":3.65296803652968,"tickwidth":0.66417600664176,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.689497716895},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(255,255,255,1)","gridwidth":0.66417600664176,"zeroline":false,"anchor":"x","title":{"text":"count","font":{"color":"rgba(0,0,0,1)","family":"","size":14.6118721461187}},"hoverformat":".2f"},"shapes":[{"type":"rect","fillcolor":null,"line":{"color":null,"width":0,"linetype":[]},"yref":"paper","xref":"paper","x0":0,"x1":1,"y0":0,"y1":1}],"showlegend":true,"legend":{"bgcolor":"rgba(255,255,255,1)","bordercolor":"transparent","borderwidth":1.88976377952756,"font":{"color":"rgba(0,0,0,1)","family":"","size":11.689497716895},"title":{"text":"factor(vs)","font":{"color":"rgba(0,0,0,1)","family":"","size":14.6118721461187}}},"hovermode":"closest","barmode":"relative"},"config":{"doubleClick":"reset","modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"source":"A","attrs":{"97ab3ccfab0d":{"x":{},"fill":{},"type":"bar"}},"cur_data":"97ab3ccfab0d","visdat":{"97ab3ccfab0d":["function (y) ","x"]},"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.2,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+
+
+---
+
+# 动态图
+
+
+```r
+as.tibble(EuStockMarkets) %&gt;% mutate(year=c(1:1860)) %&gt;% 
+ggplot(aes(x=SMI,y=CAC)) +
+geom_point(size=1,alpha=0.6,col='red') +
+transition_states(year,
+                  transition_length = 2,
+                  state_length = 1)+
+ease_aes('linear')+
+ggtitle('Timepoints is {closest_state} \n VL(M) is ture?')+
+  shadow_mark(size = 0.5, colour = 'lightblue')
+```
+
+![](ppt2_files/figure-html/unnamed-chunk-1-1.gif)&lt;!-- --&gt;
+
+---
+
+# 地图模式
+
+
+```r
+leaflet() %&gt;% 
+  addTiles() %&gt;% 
+  setView(112.99, 28.11, zoom = 10)
+```
+
+<div class="leaflet html-widget html-fill-item-overflow-hidden html-fill-item" id="htmlwidget-e27d0f866997d29f3774" style="width:100%;height:432px;"></div>
+<script type="application/json" data-for="htmlwidget-e27d0f866997d29f3774">{"x":{"options":{"crs":{"crsClass":"L.CRS.EPSG3857","code":null,"proj4def":null,"projectedBounds":null,"options":{}}},"calls":[{"method":"addTiles","args":["https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",null,null,{"minZoom":0,"maxZoom":18,"tileSize":256,"subdomains":"abc","errorTileUrl":"","tms":false,"noWrap":false,"zoomOffset":0,"zoomReverse":false,"opacity":1,"zIndex":1,"detectRetina":false,"attribution":"&copy; <a href=\"https://openstreetmap.org\">OpenStreetMap<\/a> contributors, <a href=\"https://creativecommons.org/licenses/by-sa/2.0/\">CC-BY-SA<\/a>"}]}],"setView":[[28.11,112.99],10,[]]},"evals":[],"jsHooks":[]}</script>
+
+---
+
+# 可选表格
+
+```r
+DT::datatable(
+  head(mtcars, 10),
+  fillContainer = FALSE,
+  options = list(pageLength = 8)
+)
+```
+
+<div class="datatables html-widget html-fill-item-overflow-hidden html-fill-item" id="htmlwidget-08f8720dd5eae9d5aec1" style="width:100%;height:auto;"></div>
+<script type="application/json" data-for="htmlwidget-08f8720dd5eae9d5aec1">{"x":{"filter":"none","vertical":false,"fillContainer":false,"data":[["Mazda RX4","Mazda RX4 Wag","Datsun 710","Hornet 4 Drive","Hornet Sportabout","Valiant","Duster 360","Merc 240D","Merc 230","Merc 280"],[21,21,22.8,21.4,18.7,18.1,14.3,24.4,22.8,19.2],[6,6,4,6,8,6,8,4,4,6],[160,160,108,258,360,225,360,146.7,140.8,167.6],[110,110,93,110,175,105,245,62,95,123],[3.9,3.9,3.85,3.08,3.15,2.76,3.21,3.69,3.92,3.92],[2.62,2.875,2.32,3.215,3.44,3.46,3.57,3.19,3.15,3.44],[16.46,17.02,18.61,19.44,17.02,20.22,15.84,20,22.9,18.3],[0,0,1,1,0,1,0,1,1,1],[1,1,1,0,0,0,0,0,0,0],[4,4,4,3,3,3,3,4,4,4],[4,4,1,1,2,1,4,2,2,4]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>mpg<\/th>\n      <th>cyl<\/th>\n      <th>disp<\/th>\n      <th>hp<\/th>\n      <th>drat<\/th>\n      <th>wt<\/th>\n      <th>qsec<\/th>\n      <th>vs<\/th>\n      <th>am<\/th>\n      <th>gear<\/th>\n      <th>carb<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"pageLength":8,"columnDefs":[{"className":"dt-right","targets":[1,2,3,4,5,6,7,8,9,10,11]},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false,"lengthMenu":[8,10,25,50,100]},"selection":{"mode":"multiple","selected":null,"target":"row","selectable":null}},"evals":[],"jsHooks":[]}</script>
+
+---
+
+background-image: url(www/sto.png)
+background-size: 350px
+background-position: 90% 8%
+
+# 视频
+&lt;video src="./www/1.mp4" width="600px" height="400px" controls="controls"&gt;&lt;/video&gt;
+
+---
+
+# 流程图
+<div class="grViz html-widget html-fill-item-overflow-hidden html-fill-item" id="htmlwidget-c7ea91349c8029fb53de" style="width:504px;height:504px;"></div>
+<script type="application/json" data-for="htmlwidget-c7ea91349c8029fb53de">{"x":{"diagram":"\n  digraph {\n# initiate graph\ngraph [layout = dot, rankdir = LR, label = \"研究路线\n\n\",labelloc = t]\n\n# global node settings\nnode [shape = rectangle, style = filled, fillcolor = Linen]\n\n    A[label = \"数据\", shape = folder, fillcolor = Beige]\n    B[label =  \"预处理-\n选取，整合变量\"]\n    C[label =  \"欠采样\n 类别不平衡样本\"]\n    D[label =  \"朴素贝叶斯\"]\n    E[label =  \"逻辑回归\"]\n    F[label =  \"神经网络\"]\n    G[label= \"gbm梯度提升\"]\n    H[label= \"gbm提升模型\n参数优化\"]\n    P[label= \"1.准确率 \n 2.重要性 \n 3.ROC曲线\"]\n    MOD[label= \"最终模型\",fillcolor = Beige]\n\n    \nblank1[label = \"\", width = 0.01, height = 0.01]   \n# A -> blank1[dir=none];\n# blank1 -> B[minlen=10];\n#   {{ rank = same; blank1 B }}\n# blank1 -> C\n# blank2[label = \"\", width = 0.01, height = 0.01]   \n# C -> blank2[dir=none];\n# blank2 -> D[minlen=1];\n#   {{ rank = same; blank2 E }}\n# blank2 -> E [minlen=10]\n    A->B\n      {{ rank = same; A B }}\n    B->C\n    C->{D,E,F,G}\n      {D,E,F,G}->P\n    subgraph cluster_modules {\n    label = \"模型构建\"\n    color = red\n    style = dashed\n    # connect moderator to module 4\n    {D,E,F,G}\n        }\n  P->H\n    subgraph cluster_moderator {\n    label = \"模型评估\"\n    color = red\n    style = dashed\n    P}\n    H->MOD\n      {{ rank = same;H MOD }}\n  }\n","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+
+---
+
+# 3D plot
+
+```r
+plot_ly(mpg, x = ~cty, y = ~hwy, z = ~cyl,size=0.1) %&gt;%
+  add_markers(color = ~cyl)
+```
+
+<div class="plotly html-widget html-fill-item-overflow-hidden html-fill-item" id="htmlwidget-77aa00203086a59e8791" style="width:504px;height:504px;"></div>
+<script type="application/json" data-for="htmlwidget-77aa00203086a59e8791">{"x":{"visdat":{"97ab6f673706":["function () ","plotlyVisDat"]},"cur_data":"97ab6f673706","attrs":{"97ab6f673706":{"x":{},"y":{},"z":{},"size":0.1,"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"scatter3d","mode":"markers","color":{},"inherit":true}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"scene":{"xaxis":{"title":"cty"},"yaxis":{"title":"hwy"},"zaxis":{"title":"cyl"}},"hovermode":"closest","showlegend":false,"legend":{"yanchor":"top","y":0.5}},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"data":[{"x":[18,21,20,21,16,18,18,18,16,20,19,15,17,17,15,15,17,16,14,11,14,13,12,16,15,16,15,15,14,11,11,14,19,22,18,18,17,18,17,16,16,17,17,11,15,15,16,16,15,14,13,14,14,14,9,11,11,13,13,9,13,11,13,11,12,9,13,13,12,9,11,11,13,11,11,11,12,14,15,14,13,13,13,14,14,13,13,13,11,13,18,18,17,16,15,15,15,15,14,28,24,25,23,24,26,25,24,21,18,18,21,21,18,18,19,19,19,20,20,17,16,17,17,15,15,14,9,14,13,11,11,12,12,11,11,11,12,14,13,13,13,21,19,23,23,19,19,18,19,19,14,15,14,12,18,16,17,18,16,18,18,20,19,20,18,21,19,19,19,20,20,19,20,15,16,15,15,16,14,21,21,21,21,18,18,19,21,21,21,22,18,18,18,24,24,26,28,26,11,13,15,16,17,15,15,15,16,21,19,21,22,17,33,21,19,22,21,21,21,16,17,35,29,21,19,20,20,21,18,19,21,16,18,17],"y":[29,29,31,30,26,26,27,26,25,28,27,25,25,25,25,24,25,23,20,15,20,17,17,26,23,26,25,24,19,14,15,17,27,30,26,29,26,24,24,22,22,24,24,17,22,21,23,23,19,18,17,17,19,19,12,17,15,17,17,12,17,16,18,15,16,12,17,17,16,12,15,16,17,15,17,17,18,17,19,17,19,19,17,17,17,16,16,17,15,17,26,25,26,24,21,22,23,22,20,33,32,32,29,32,34,36,36,29,26,27,30,31,26,26,28,26,29,28,27,24,24,24,22,19,20,17,12,19,18,14,15,18,18,15,17,16,18,17,19,19,17,29,27,31,32,27,26,26,25,25,17,17,20,18,26,26,27,28,25,25,24,27,25,26,23,26,26,26,26,25,27,25,27,20,20,19,17,20,17,29,27,31,31,26,26,28,27,29,31,31,26,26,27,30,33,35,37,35,15,18,20,20,22,17,19,18,20,29,26,29,29,24,44,29,26,29,29,29,29,23,24,44,41,29,26,28,29,29,29,28,29,26,26,26],"z":[4,4,4,4,6,6,6,4,4,4,4,6,6,6,6,6,6,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,4,4,6,6,6,4,6,6,6,6,6,6,6,6,6,6,6,6,6,6,8,8,8,8,8,6,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,6,6,6,6,8,8,6,6,8,8,8,8,8,6,6,6,6,8,8,8,8,8,4,4,4,4,4,4,4,4,4,4,4,4,4,6,6,6,4,4,4,4,6,6,6,6,6,6,8,8,8,8,8,8,8,8,8,8,8,8,6,6,8,8,4,4,4,4,6,6,6,6,6,6,6,6,8,6,6,6,6,8,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,6,6,6,8,4,4,4,4,6,6,6,4,4,4,4,6,6,6,4,4,4,4,4,8,8,4,4,4,6,6,6,6,4,4,4,4,6,4,4,4,4,4,5,5,6,6,4,4,4,4,5,5,4,4,4,4,6,6,6],"type":"scatter3d","mode":"markers","marker":{"colorbar":{"title":"cyl","ticklen":2},"cmin":4,"cmax":8,"colorscale":[["0","rgba(68,1,84,1)"],["0.0416666666666667","rgba(70,19,97,1)"],["0.0833333333333333","rgba(72,32,111,1)"],["0.125","rgba(71,45,122,1)"],["0.166666666666667","rgba(68,58,128,1)"],["0.208333333333333","rgba(64,70,135,1)"],["0.25","rgba(60,82,138,1)"],["0.291666666666667","rgba(56,93,140,1)"],["0.333333333333333","rgba(49,104,142,1)"],["0.375","rgba(46,114,142,1)"],["0.416666666666667","rgba(42,123,142,1)"],["0.458333333333333","rgba(38,133,141,1)"],["0.5","rgba(37,144,140,1)"],["0.541666666666667","rgba(33,154,138,1)"],["0.583333333333333","rgba(39,164,133,1)"],["0.625","rgba(47,174,127,1)"],["0.666666666666667","rgba(53,183,121,1)"],["0.708333333333333","rgba(79,191,110,1)"],["0.75","rgba(98,199,98,1)"],["0.791666666666667","rgba(119,207,85,1)"],["0.833333333333333","rgba(147,214,70,1)"],["0.875","rgba(172,220,52,1)"],["0.916666666666667","rgba(199,225,42,1)"],["0.958333333333333","rgba(226,228,40,1)"],["1","rgba(253,231,37,1)"]],"showscale":false,"color":[4,4,4,4,6,6,6,4,4,4,4,6,6,6,6,6,6,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,4,4,6,6,6,4,6,6,6,6,6,6,6,6,6,6,6,6,6,6,8,8,8,8,8,6,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,6,6,6,6,8,8,6,6,8,8,8,8,8,6,6,6,6,8,8,8,8,8,4,4,4,4,4,4,4,4,4,4,4,4,4,6,6,6,4,4,4,4,6,6,6,6,6,6,8,8,8,8,8,8,8,8,8,8,8,8,6,6,8,8,4,4,4,4,6,6,6,6,6,6,6,6,8,6,6,6,6,8,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,6,6,6,8,4,4,4,4,6,6,6,4,4,4,4,6,6,6,4,4,4,4,4,8,8,4,4,4,6,6,6,6,4,4,4,4,6,4,4,4,4,4,5,5,6,6,4,4,4,4,5,5,4,4,4,4,6,6,6],"size":[55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55],"sizemode":"area","line":{"colorbar":{"title":"","ticklen":2},"cmin":4,"cmax":8,"colorscale":[["0","rgba(68,1,84,1)"],["0.0416666666666667","rgba(70,19,97,1)"],["0.0833333333333333","rgba(72,32,111,1)"],["0.125","rgba(71,45,122,1)"],["0.166666666666667","rgba(68,58,128,1)"],["0.208333333333333","rgba(64,70,135,1)"],["0.25","rgba(60,82,138,1)"],["0.291666666666667","rgba(56,93,140,1)"],["0.333333333333333","rgba(49,104,142,1)"],["0.375","rgba(46,114,142,1)"],["0.416666666666667","rgba(42,123,142,1)"],["0.458333333333333","rgba(38,133,141,1)"],["0.5","rgba(37,144,140,1)"],["0.541666666666667","rgba(33,154,138,1)"],["0.583333333333333","rgba(39,164,133,1)"],["0.625","rgba(47,174,127,1)"],["0.666666666666667","rgba(53,183,121,1)"],["0.708333333333333","rgba(79,191,110,1)"],["0.75","rgba(98,199,98,1)"],["0.791666666666667","rgba(119,207,85,1)"],["0.833333333333333","rgba(147,214,70,1)"],["0.875","rgba(172,220,52,1)"],["0.916666666666667","rgba(199,225,42,1)"],["0.958333333333333","rgba(226,228,40,1)"],["1","rgba(253,231,37,1)"]],"showscale":false,"color":[4,4,4,4,6,6,6,4,4,4,4,6,6,6,6,6,6,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,4,4,6,6,6,4,6,6,6,6,6,6,6,6,6,6,6,6,6,6,8,8,8,8,8,6,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,6,6,6,6,8,8,6,6,8,8,8,8,8,6,6,6,6,8,8,8,8,8,4,4,4,4,4,4,4,4,4,4,4,4,4,6,6,6,4,4,4,4,6,6,6,6,6,6,8,8,8,8,8,8,8,8,8,8,8,8,6,6,8,8,4,4,4,4,6,6,6,6,6,6,6,6,8,6,6,6,6,8,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,6,6,6,8,4,4,4,4,6,6,6,4,4,4,4,6,6,6,4,4,4,4,4,8,8,4,4,4,6,6,6,6,4,4,4,4,6,4,4,4,4,4,5,5,6,6,4,4,4,4,5,5,4,4,4,4,6,6,6]}},"textfont":{"size":55},"error_y":{"width":55},"error_x":{"width":55},"line":{"width":55},"frame":null},{"x":[9,35],"y":[12,44],"type":"scatter3d","mode":"markers","opacity":0,"hoverinfo":"none","showlegend":false,"marker":{"colorbar":{"title":"cyl","ticklen":2,"len":0.5,"lenmode":"fraction","y":1,"yanchor":"top"},"cmin":4,"cmax":8,"colorscale":[["0","rgba(68,1,84,1)"],["0.0416666666666667","rgba(70,19,97,1)"],["0.0833333333333333","rgba(72,32,111,1)"],["0.125","rgba(71,45,122,1)"],["0.166666666666667","rgba(68,58,128,1)"],["0.208333333333333","rgba(64,70,135,1)"],["0.25","rgba(60,82,138,1)"],["0.291666666666667","rgba(56,93,140,1)"],["0.333333333333333","rgba(49,104,142,1)"],["0.375","rgba(46,114,142,1)"],["0.416666666666667","rgba(42,123,142,1)"],["0.458333333333333","rgba(38,133,141,1)"],["0.5","rgba(37,144,140,1)"],["0.541666666666667","rgba(33,154,138,1)"],["0.583333333333333","rgba(39,164,133,1)"],["0.625","rgba(47,174,127,1)"],["0.666666666666667","rgba(53,183,121,1)"],["0.708333333333333","rgba(79,191,110,1)"],["0.75","rgba(98,199,98,1)"],["0.791666666666667","rgba(119,207,85,1)"],["0.833333333333333","rgba(147,214,70,1)"],["0.875","rgba(172,220,52,1)"],["0.916666666666667","rgba(199,225,42,1)"],["0.958333333333333","rgba(226,228,40,1)"],["1","rgba(253,231,37,1)"]],"showscale":true,"color":[4,8],"line":{"color":"rgba(255,127,14,1)"}},"z":[4,8],"frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.2,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+
+
+---
+
+```
+## 1/1 002468.sz
+```
+
+![](ppt2_files/figure-html/unnamed-chunk-4-1.gif)&lt;!-- --&gt;
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create();
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

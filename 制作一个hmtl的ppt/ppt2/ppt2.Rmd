@@ -1,0 +1,205 @@
+---
+title: "我的每日ppt"
+subtitle: "第一版"
+author: "caohuazhang"
+institute: "R"
+date: "`r Sys.Date()`"
+output: 
+  xaringan::moon_reader:
+    css: ["zh-CN.css","style.css"]
+    highlightLines: true
+
+---
+
+background-image: url(www/bg.jpeg)
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+knitr::opts_chunk$set(echo = T,message = F,warning = F)
+library(plotly)
+library(gganimate)
+library(tidyverse)
+library(pedquant)
+library(leaflet)
+library(DiagrammeR)
+# background-image: url('www/ganyu.jpeg')
+# background-size: contain
+# /* 关键字 */
+# background-size: cover
+# background-size: contain
+# 
+# /* 一个值：这个值指定图片的宽度，图片的高度隐式的为 auto */
+# background-size: 50%
+# background-size: 3em
+# background-size: 12px
+# background-size: auto
+
+```
+
+
+# myppt
+
+### <font color=Blue size=50>我是蓝色</font>
+
+---
+<!-- 按顺序出现 -->
+除非你是六指琴魔，否则我建议安装 [RStudio 编辑器](https://www.rstudio.com/products/rstudio/)，它会让你做幻灯片做得飞起。
+
+- 从菜单 `File -> New File -> R Markdown -> From Template -> Ninja Presentation (Simplified Chinese)` 创建一个新文档；
+
+--
+
+- 点击 `Knit` 按钮编译文档；
+
+--
+
+- 或者点击 [RStudio 插件](https://rstudio.github.io/rstudioaddins/)<sup>*</sup> “Infinite Moon Reader” 在 RStudio 里实时预览幻灯片（每次你保存文档的时候，它会自动重新编译）；
+
+<!-- 尾注 -->
+.footnote[[*] 如果你看不到模板或者插件，请参见 [#2](https://github.com/yihui/xaringan/issues/2)，你的某些 R 包可能崩坏了，需要重新安装。]
+
+
+---
+
+# R 图形
+
+```{r plot, fig.height=3.5,message=F,warning=F}
+p<-ggplot(mtcars,aes(x=cyl,fill=factor(vs)))+
+  geom_bar()
+ggplotly(p)
+```
+
+
+---
+
+# 动态图
+
+```{r,fig.height=3,fig.width=4}
+as.tibble(EuStockMarkets) %>% mutate(year=c(1:1860)) %>% 
+ggplot(aes(x=SMI,y=CAC)) +
+geom_point(size=1,alpha=0.6,col='red') +
+transition_states(year,
+                  transition_length = 2,
+                  state_length = 1)+
+ease_aes('linear')+
+ggtitle('Timepoints is {closest_state} \n VL(M) is ture?')+
+  shadow_mark(size = 0.5, colour = 'lightblue')
+
+```
+
+---
+
+# 地图模式
+
+```{r out.width='100%', fig.height=6}
+leaflet() %>% 
+  addTiles() %>% 
+  setView(112.99, 28.11, zoom = 10)
+```
+
+---
+
+# 可选表格
+```{r , tidy=FALSE}
+DT::datatable(
+  head(mtcars, 10),
+  fillContainer = FALSE,
+  options = list(pageLength = 8)
+)
+```
+
+---
+
+background-image: url(www/sto.png)
+background-size: 350px
+background-position: 90% 8%
+
+# 视频
+<video src="./www/1.mp4" width="600px" height="400px" controls="controls"></video>
+
+---
+
+# 流程图
+```{r 流程图, echo=FALSE}
+grViz("
+  digraph {
+# initiate graph
+graph [layout = dot, rankdir = LR, label = '研究路线\n\n',labelloc = t]
+
+# global node settings
+node [shape = rectangle, style = filled, fillcolor = Linen]
+
+    A[label = '数据', shape = folder, fillcolor = Beige]
+    B[label =  '预处理-\n选取，整合变量']
+    C[label =  '欠采样\n 类别不平衡样本']
+    D[label =  '朴素贝叶斯']
+    E[label =  '逻辑回归']
+    F[label =  '神经网络']
+    G[label= 'gbm梯度提升']
+    H[label= 'gbm提升模型\n参数优化']
+    P[label= '1.准确率 \n 2.重要性 \n 3.ROC曲线']
+    MOD[label= '最终模型',fillcolor = Beige]
+
+    
+blank1[label = '', width = 0.01, height = 0.01]   
+# A -> blank1[dir=none];
+# blank1 -> B[minlen=10];
+#   {{ rank = same; blank1 B }}
+# blank1 -> C
+# blank2[label = '', width = 0.01, height = 0.01]   
+# C -> blank2[dir=none];
+# blank2 -> D[minlen=1];
+#   {{ rank = same; blank2 E }}
+# blank2 -> E [minlen=10]
+    A->B
+      {{ rank = same; A B }}
+    B->C
+    C->{D,E,F,G}
+      {D,E,F,G}->P
+    subgraph cluster_modules {
+    label = '模型构建'
+    color = red
+    style = dashed
+    # connect moderator to module 4
+    {D,E,F,G}
+        }
+  P->H
+    subgraph cluster_moderator {
+    label = '模型评估'
+    color = red
+    style = dashed
+    P}
+    H->MOD
+      {{ rank = same;H MOD }}
+  }
+")
+```
+
+---
+
+# 3D plot
+```{r 3D}
+plot_ly(mpg, x = ~cty, y = ~hwy, z = ~cyl,size=0.1) %>%
+  add_markers(color = ~cyl)
+```
+
+
+---
+```{r echo=FALSE}
+stock<-md_stock("002468.sz",from='2019-01-01',
+                       to=today(),
+                       source="163",
+                       adjust="dividend")
+mydata<-stock[[1]]%>%as_tibble() %>%
+  filter(date>ymd(20230101)) %>% 
+  mutate(date=ymd(date),xx=c(1:length(date)))
+xdat<-mydata[seq(1,nrow(mydata),30),c('xx',"date")]
+p1<-ggplot()+geom_line(data=mydata,aes(x=xx,y=close))+
+  theme_classic()+
+  theme(axis.text.x = element_blank(),
+        axis.line.x = element_blank(),
+        axis.ticks.x = element_blank())+
+  labs(x=NULL)
+p1+transition_reveal(xx)
+```
+
